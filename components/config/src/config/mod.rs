@@ -14,6 +14,7 @@ use serde_derive::{Deserialize, Serialize};
 use toml::Value as Toml;
 
 use crate::theme::Theme;
+use crate::Katex;
 use errors::{bail, Error, Result};
 use utils::fs::read_file;
 
@@ -86,6 +87,8 @@ pub struct Config {
     pub search: search::Search,
     /// The config for the Markdown rendering: syntax highlighting and everything
     pub markdown: markup::Markdown,
+    /// The config for the KaTeX rendering
+    pub katex: katex::Katex,
     /// All user params set in `[extra]` in the config
     pub extra: HashMap<String, Toml>,
 }
@@ -358,6 +361,7 @@ impl Default for Config {
             search: search::Search::default(),
             markdown: markup::Markdown::default(),
             extra: HashMap::new(),
+            katex: Katex::default(),
         }
     }
 }

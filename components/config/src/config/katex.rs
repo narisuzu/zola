@@ -22,8 +22,8 @@ pub struct Katex {
     pub restrict: bool,
     // set the delimiters of formula. Use '\' for escaping
     // Example:
-    // "ab\$cd\$ef" will be rendered to "ab$cd$ef". "cd" won't be treated as a formula
-    // "ab\$$cd\$$ef" -> "ab$$cd$$ef"
+    // "ab\$cd\$ef" will be rendered to "ab$cd$ef". "cd\" won't be processed as a formula
+    // "ab\$$cd\$$ef" -> "ab$$cd$$ef". delimiters composed by multiple chars can be escaped with a single '\' before it.
     pub delimiters: Vec<Delimiter>,
 }
 
