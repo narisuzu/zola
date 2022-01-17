@@ -16,6 +16,7 @@ pest_derive = "2"
 regex = "1"
 lazy_static = "1"
 gh-emoji = "1.0"
+katex = "*"
 
 errors = { path = "../errors" }
 front_matter = { path = "../front_matter" }
