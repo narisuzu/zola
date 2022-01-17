@@ -5,7 +5,7 @@ mod markdown;
 mod shortcode;
 mod table_of_contents;
 
-use katex::render_katex;
+use crate::katex::render_katex;
 use shortcode::{extract_shortcodes, insert_md_shortcodes};
 
 use errors::Result;
