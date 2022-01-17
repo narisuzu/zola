@@ -3,8 +3,13 @@ pub mod highlighting;
 mod theme;
 
 pub use crate::config::{
-    languages::LanguageOptions, link_checker::LinkChecker, search::Search, slugify::Slugify,
-    taxonomies::Taxonomy, Config,
+    katex::{Delimiter, Katex},
+    languages::LanguageOptions,
+    link_checker::LinkChecker,
+    search::Search,
+    slugify::Slugify,
+    taxonomies::Taxonomy,
+    Config,
 };
 use errors::Result;
 

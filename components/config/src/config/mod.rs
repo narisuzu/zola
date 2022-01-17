@@ -1,3 +1,4 @@
+pub mod katex;
 pub mod languages;
 pub mod link_checker;
 pub mod markup;

@@ -1,5 +1,6 @@
 mod codeblock;
 mod context;
+mod katex;
 mod markdown;
 mod shortcode;
 mod table_of_contents;
