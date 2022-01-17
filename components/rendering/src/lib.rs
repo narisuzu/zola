@@ -5,6 +5,7 @@ mod markdown;
 mod shortcode;
 mod table_of_contents;
 
+use katex::render_katex;
 use shortcode::{extract_shortcodes, insert_md_shortcodes};
 
 use errors::Result;
@@ -27,6 +28,9 @@ pub fn render_content(content: &str, context: &RenderContext) -> Result<markdown
     // Step 1: we render the MD shortcodes before rendering the markdown so they can get processed
     let (content, html_shortcodes) =
         insert_md_shortcodes(content, shortcodes, &context.tera_context, &context.tera)?;
+
+    // Step 2: render KaTeX code
+    let content = render_katex(&content, &context.config.katex)?;
 
     // Step 2: we render the markdown and the HTML markdown at the same time
     let html_context = markdown_to_html(&content, context, html_shortcodes)?;
