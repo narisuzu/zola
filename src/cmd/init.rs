@@ -108,7 +108,7 @@ pub fn create_new_project(name: &str, force: bool) -> Result<()> {
         .replace("%COMPILE_SASS%", &format!("{}", compile_sass))
         .replace("%SEARCH%", &format!("{}", search))
         .replace("%HIGHLIGHT%", &format!("{}", highlight))
-        .replace("%ENABLE_KATEX", &format!("{}", katex));
+        .replace("%ENABLE_KATEX%", &format!("{}", katex));
 
     populate(path, compile_sass, &config)?;
 
