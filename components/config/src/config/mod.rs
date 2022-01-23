@@ -89,7 +89,7 @@ pub struct Config {
     pub markdown: markup::Markdown,
     /// The config for the KaTeX rendering
     pub katex: katex::Katex,
-    /// All user params set in [extra] in the config
+    /// All user params set in `[extra]` in the config
     pub extra: HashMap<String, Toml>,
 }
 
