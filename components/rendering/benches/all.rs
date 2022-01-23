@@ -95,6 +95,7 @@ fn bench_render_content_with_highlighting(b: &mut test::Bencher) {
         current_page_permalink,
         &permalinks_ctx,
         InsertAnchor::None,
+false
     );
     b.iter(|| render_content(CONTENT, &context).unwrap());
 }
@@ -114,6 +115,7 @@ fn bench_render_content_without_highlighting(b: &mut test::Bencher) {
         current_page_permalink,
         &permalinks_ctx,
         InsertAnchor::None,
+false
     );
     b.iter(|| render_content(CONTENT, &context).unwrap());
 }
@@ -132,6 +134,7 @@ fn bench_render_content_no_shortcode(b: &mut test::Bencher) {
         current_page_permalink,
         &permalinks_ctx,
         InsertAnchor::None,
+false
     );
 
     b.iter(|| render_content(&content2, &context).unwrap());
@@ -153,6 +156,7 @@ fn bench_render_content_with_emoji(b: &mut test::Bencher) {
         current_page_permalink,
         &permalinks_ctx,
         InsertAnchor::None,
+false
     );
 
     b.iter(|| render_content(&content2, &context).unwrap());
