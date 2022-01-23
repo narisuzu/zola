@@ -1,9 +1,23 @@
 use std::{str, vec};
 
-use config::{Delimiter, Katex as Config};
+use config::Delimiter;
 use errors::{Error, Result};
 use katex::{self, Opts};
 use regex::Regex;
+
+/// All the information from render HTML from katex
+#[derive(Debug)]
+pub struct KatexContext {
+    enable: bool,
+    restrict: bool,
+    delimiters: Vec<Delimiter>,
+}
+
+impl KatexContext {
+    pub fn new(enable: bool, restrict: bool, delimiters: Vec<Delimiter>) -> Self {
+        KatexContext { enable, restrict, delimiters }
+    }
+}
 
 #[derive(Debug)]
 enum Segment {
@@ -98,12 +112,12 @@ fn spilt_at_delimiters(text: &str, delimiters: &Vec<Delimiter>) -> Vec<Segment> 
     data
 }
 
-pub(crate) fn render_katex(content: &str, config: &Config) -> Result<String> {
-    if !config.enable {
+pub(crate) fn render_katex(content: &str, ctx: &KatexContext) -> Result<String> {
+    if !ctx.enable {
         return Ok(content.to_string());
     }
 
-    let datas = spilt_at_delimiters(content, &config.delimiters);
+    let datas = spilt_at_delimiters(content, &ctx.delimiters);
     if datas.len() == 1 {
         if let Segment::Text { data } = &datas[0] {
             return Ok(data.clone());
@@ -131,7 +145,7 @@ pub(crate) fn render_katex(content: &str, config: &Config) -> Result<String> {
         }
     });
 
-    if config.restrict && !errors.is_empty() {
+    if ctx.restrict && !errors.is_empty() {
         return Err(Error::msg(errors.join("\n")));
     }
 
@@ -148,14 +162,20 @@ pub(crate) fn render_katex_aux(content: &str, display: bool) -> katex::Result<St
 mod tests {
     use super::*;
 
+    fn ctx() -> KatexContext {
+        KatexContext::new(
+            true,
+            false,
+            vec![Delimiter::new("$$", "$$", true), Delimiter::new("$", "$", false)],
+        )
+    }
+
     fn unchanged(eg: &str) {
-        let config = Config { enable: true, ..Default::default() };
-        assert_eq!(eg, render_katex(eg, &config).unwrap());
+        assert_eq!(eg, render_katex(eg, &ctx()).unwrap());
     }
 
     fn changed(eg: &str) {
-        let config = Config { enable: true, ..Default::default() };
-        let result = render_katex(eg, &config).unwrap();
+        let result = render_katex(eg, &ctx()).unwrap();
         assert!(result.len() > eg.len());
         assert_ne!(eg, &result[..eg.len()]);
     }
@@ -166,30 +186,34 @@ mod tests {
     }
 
     #[test]
+    #[should_panic]
+    fn restrict_working() {
+        let ctx = KatexContext { restrict: true, ..ctx() };
+        let _ = render_katex(r"$$katex", &ctx).unwrap();
+    }
+
+    #[test]
     fn unclosed_delimiter_warn() {
-        let config = Config { enable: true, ..Default::default() };
         assert_eq!(
             r"$F = ma ***[KaTeX Warning] Unclosed delimiter ->*** $",
-            render_katex(r"\$F = ma$", &config).unwrap()
+            render_katex(r"\$F = ma$", &ctx()).unwrap()
         );
         assert_eq!(
             r" ***[KaTeX Warning] Unclosed delimiter ->*** $F = ma\$",
-            render_katex(r"$F = ma\$", &config).unwrap()
+            render_katex(r"$F = ma\$", &ctx()).unwrap()
         );
     }
 
     #[test]
     fn delimiter_escape() {
-        let config = Config { enable: true, ..Default::default() };
-        assert_eq!(r"$F = ma$", render_katex(r"\$F = ma\$", &config).unwrap());
-        assert_eq!(r"$$F = ma$", render_katex(r"\$$F = ma\$", &config).unwrap());
+        assert_eq!(r"$F = ma$", render_katex(r"\$F = ma\$", &ctx()).unwrap());
+        assert_eq!(r"$$F = ma$", render_katex(r"\$$F = ma\$", &ctx()).unwrap());
     }
 
     #[test]
     fn working_inline() {
-        let config = Config { enable: true, ..Default::default() };
         let eg = r"Consider $π = \frac{1}{2}τ$ for a moment.";
-        let result = render_katex(eg, &config).unwrap();
+        let result = render_katex(eg, &ctx()).unwrap();
         assert!(result.len() > eg.len());
         assert_ne!(eg, result);
         assert_eq!(eg[..9], result[..9]);
@@ -209,13 +233,12 @@ mod tests {
 
     #[test]
     fn multiple_formulae() {
-        let config = Config { enable: true, ..Default::default() };
         let eg = r"Consider $π = \frac{1}{2}τ$, then
             $$
                 4 \int_{-1}^1 \sqrt{1 - x^2} \mathop{dx} = τ
             $$
             and also consider $A = πr^2$ for a moment.";
-        let result = render_katex(eg, &config).unwrap();
+        let result = render_katex(eg, &ctx()).unwrap();
         assert!(result.len() > eg.len());
         assert!(result.contains(", then"));
         assert!(result.contains("and also consider "));

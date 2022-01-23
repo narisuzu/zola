@@ -47,6 +47,7 @@ fn hl_lines_simple() {
         "",
         &permalinks_ctx,
         InsertAnchor::None,
+        false,
     );
     let res = render_content(
         r#"
@@ -84,6 +85,7 @@ fn hl_lines_in_middle() {
         "",
         &permalinks_ctx,
         InsertAnchor::None,
+        false,
     );
     let res = render_content(
         r#"
@@ -121,6 +123,7 @@ fn hl_lines_all() {
         "",
         &permalinks_ctx,
         InsertAnchor::None,
+        false,
     );
     let res = render_content(
         r#"
@@ -158,6 +161,7 @@ fn hl_lines_start_from_one() {
         "",
         &permalinks_ctx,
         InsertAnchor::None,
+        false,
     );
     let res = render_content(
         r#"
@@ -195,6 +199,7 @@ fn hl_lines_start_from_zero() {
         "",
         &permalinks_ctx,
         InsertAnchor::None,
+        false,
     );
     let res = render_content(
         r#"
@@ -232,6 +237,7 @@ fn hl_lines_end() {
         "",
         &permalinks_ctx,
         InsertAnchor::None,
+        false,
     );
     let res = render_content(
         r#"
@@ -269,6 +275,7 @@ fn hl_lines_end_out_of_bounds() {
         "",
         &permalinks_ctx,
         InsertAnchor::None,
+        false,
     );
     let res = render_content(
         r#"
@@ -306,6 +313,7 @@ fn hl_lines_overlap() {
         "",
         &permalinks_ctx,
         InsertAnchor::None,
+        false,
     );
     let res = render_content(
         r#"
@@ -342,6 +350,7 @@ fn hl_lines_multiple() {
         "",
         &permalinks_ctx,
         InsertAnchor::None,
+        false,
     );
     let res = render_content(
         r#"
@@ -379,6 +388,7 @@ fn hl_lines_extra_spaces() {
         "",
         &permalinks_ctx,
         InsertAnchor::None,
+        false,
     );
     let res = render_content(
         r#"
@@ -416,6 +426,7 @@ fn hl_lines_int_and_range() {
         "",
         &permalinks_ctx,
         InsertAnchor::None,
+        false,
     );
     let res = render_content(
         r#"
@@ -453,6 +464,7 @@ fn hl_lines_single_line_range() {
         "",
         &permalinks_ctx,
         InsertAnchor::None,
+        false,
     );
     let res = render_content(
         r#"
@@ -490,6 +502,7 @@ fn hl_lines_reverse_range() {
         "",
         &permalinks_ctx,
         InsertAnchor::None,
+        false,
     );
     let res = render_content(
         r#"

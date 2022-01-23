@@ -35,6 +35,8 @@ pub struct PageFrontMatter {
     /// The converted date into a (year, month, day) tuple
     #[serde(default, skip_deserializing)]
     pub datetime_tuple: Option<(i32, u32, u32)>,
+    /// Enable katex within this page
+    pub katex: bool,
     /// Whether this page is a draft
     pub draft: bool,
     /// The page slug. Will be used instead of the filename if present
@@ -144,6 +146,7 @@ impl Default for PageFrontMatter {
             in_search_index: true,
             template: None,
             extra: Map::new(),
+            katex: false,
         }
     }
 }

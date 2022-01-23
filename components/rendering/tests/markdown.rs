@@ -20,6 +20,7 @@ fn can_do_render_content_simple() {
         "",
         &permalinks_ctx,
         InsertAnchor::None,
+        false,
     );
     let res = render_content("hello", &context).unwrap();
     assert_eq!(res.body, "<p>hello</p>\n");
@@ -38,6 +39,7 @@ fn doesnt_highlight_code_block_with_highlighting_off() {
         "",
         &permalinks_ctx,
         InsertAnchor::None,
+        false,
     );
     let res = render_content("```\n$ gutenberg server\n```", &context).unwrap();
     assert_eq!(res.body, "<pre><code>$ gutenberg server\n</code></pre>\n");
@@ -56,6 +58,7 @@ fn can_highlight_code_block_no_lang() {
         "",
         &permalinks_ctx,
         InsertAnchor::None,
+        false,
     );
     let res = render_content("```\n$ gutenberg server\n$ ping\n```", &context).unwrap();
     assert_eq!(
@@ -77,6 +80,7 @@ fn can_highlight_code_block_with_lang() {
         "",
         &permalinks_ctx,
         InsertAnchor::None,
+        false,
     );
     let res = render_content("```python\nlist.append(1)\n```", &context).unwrap();
     assert_eq!(
@@ -98,6 +102,7 @@ fn can_higlight_code_block_with_unknown_lang() {
         "",
         &permalinks_ctx,
         InsertAnchor::None,
+        false,
     );
     let res = render_content("```yolo\nlist.append(1)\n```", &context).unwrap();
     // defaults to plain text
@@ -118,6 +123,7 @@ fn can_render_shortcode() {
         "",
         &permalinks_ctx,
         InsertAnchor::None,
+        false,
     );
     let shortcode_def = utils::templates::get_shortcodes(&ZOLA_TERA);
     context.set_shortcode_definitions(&shortcode_def);
@@ -148,6 +154,7 @@ fn can_render_shortcode_with_markdown_char_in_args_name() {
         "",
         &permalinks_ctx,
         InsertAnchor::None,
+        false,
     );
     let shortcode_def = utils::templates::get_shortcodes(&ZOLA_TERA);
     context.set_shortcode_definitions(&shortcode_def);
@@ -170,6 +177,7 @@ fn can_render_shortcode_with_markdown_char_in_args_value() {
         "",
         &permalinks_ctx,
         InsertAnchor::None,
+        false,
     );
     let shortcode_def = utils::templates::get_shortcodes(&ZOLA_TERA);
     context.set_shortcode_definitions(&shortcode_def);
@@ -202,6 +210,7 @@ fn can_render_html_shortcode_with_lang() {
         "",
         &permalinks_ctx,
         InsertAnchor::None,
+        false,
     );
     let shortcode_def = utils::templates::get_shortcodes(&tera);
     context.set_shortcode_definitions(&shortcode_def);
@@ -228,6 +237,7 @@ fn can_render_md_shortcode_with_lang() {
         "",
         &permalinks_ctx,
         InsertAnchor::None,
+        false,
     );
     let shortcode_def = utils::templates::get_shortcodes(&tera);
     context.set_shortcode_definitions(&shortcode_def);
@@ -257,6 +267,7 @@ fn can_render_body_shortcode_with_markdown_char_in_name() {
             "",
             &permalinks_ctx,
             InsertAnchor::None,
+            false,
         );
         let shortcode_def = utils::templates::get_shortcodes(&tera);
         context.set_shortcode_definitions(&shortcode_def);
@@ -297,6 +308,7 @@ Here is another paragraph.
         "",
         &permalinks_ctx,
         InsertAnchor::None,
+        false,
     );
     let shortcode_def = utils::templates::get_shortcodes(&tera);
     context.set_shortcode_definitions(&shortcode_def);
@@ -336,6 +348,7 @@ Here is another paragraph.
         "",
         &permalinks_ctx,
         InsertAnchor::None,
+        false,
     );
     let shortcode_def = utils::templates::get_shortcodes(&tera);
     context.set_shortcode_definitions(&shortcode_def);
@@ -356,6 +369,7 @@ fn can_render_several_shortcode_in_row() {
         "",
         &permalinks_ctx,
         InsertAnchor::None,
+        false,
     );
     let shortcode_def = utils::templates::get_shortcodes(&ZOLA_TERA);
     context.set_shortcode_definitions(&shortcode_def);
@@ -401,6 +415,7 @@ fn doesnt_render_ignored_shortcodes() {
         "",
         &permalinks_ctx,
         InsertAnchor::None,
+        false,
     );
     let res = render_content(r#"```{{/* youtube(id="w7Ft2ymGmfc") */}}```"#, &context).unwrap();
     assert_eq!(res.body, "<p><code>{{ youtube(id=&quot;w7Ft2ymGmfc&quot;) }}</code></p>\n");
@@ -424,6 +439,7 @@ fn can_render_shortcode_with_body() {
         "",
         &permalinks_ctx,
         InsertAnchor::None,
+        false,
     );
     let shortcode_def = utils::templates::get_shortcodes(&tera);
     context.set_shortcode_definitions(&shortcode_def);
@@ -453,6 +469,7 @@ fn errors_rendering_unknown_shortcode() {
         "",
         &permalinks_ctx,
         InsertAnchor::None,
+        false,
     );
     let res = render_content("{{ hello(flash=true) }}", &context);
     assert!(res.is_err());
@@ -471,6 +488,7 @@ fn can_make_valid_relative_link() {
         "",
         &permalinks,
         InsertAnchor::None,
+        false,
     );
     let res = render_content(
         r#"[rel link](@/pages/about.md), [abs link](https://vincent.is/about)"#,
@@ -496,6 +514,7 @@ fn can_make_relative_links_with_anchors() {
         "",
         &permalinks,
         InsertAnchor::None,
+        false,
     );
     let res = render_content(r#"[rel link](@/pages/about.md#cv)"#, &context).unwrap();
 
@@ -514,6 +533,7 @@ fn errors_relative_link_inexistant() {
         "",
         &permalinks_ctx,
         InsertAnchor::None,
+        false,
     );
     let res = render_content("[rel link](@/pages/about.md)", &context);
     assert!(res.is_err());
@@ -531,6 +551,7 @@ fn can_add_id_to_headings() {
         "",
         &permalinks_ctx,
         InsertAnchor::None,
+        false,
     );
     let res = render_content(r#"# Hello"#, &context).unwrap();
     assert_eq!(res.body, "<h1 id=\"hello\">Hello</h1>\n");
@@ -548,6 +569,7 @@ fn can_add_id_to_headings_same_slug() {
         "",
         &permalinks_ctx,
         InsertAnchor::None,
+        false,
     );
     let res = render_content("# Hello\n# Hello", &context).unwrap();
     assert_eq!(res.body, "<h1 id=\"hello\">Hello</h1>\n<h1 id=\"hello-1\">Hello</h1>\n");
@@ -566,6 +588,7 @@ fn can_add_non_slug_id_to_headings() {
         "",
         &permalinks_ctx,
         InsertAnchor::None,
+        false,
     );
     let res = render_content(r#"# L'écologie et vous"#, &context).unwrap();
     assert_eq!(res.body, "<h1 id=\"L'écologie_et_vous\">L'écologie et vous</h1>\n");
@@ -583,6 +606,7 @@ fn can_handle_manual_ids_on_headings() {
         "",
         &permalinks_ctx,
         InsertAnchor::None,
+        false,
     );
     // Tested things: manual IDs; whitespace flexibility; that automatic IDs avoid collision with
     // manual IDs; that duplicates are in fact permitted among manual IDs; that any non-plain-text
@@ -627,6 +651,7 @@ fn blank_headings() {
         "",
         &permalinks_ctx,
         InsertAnchor::None,
+        false,
     );
     let res = render_content("# \n#\n# {#hmm} \n# {#}", &context).unwrap();
     assert_eq!(
@@ -646,6 +671,7 @@ fn can_insert_anchor_left() {
         "",
         &permalinks_ctx,
         InsertAnchor::Left,
+        false,
     );
     let res = render_content("# Hello", &context).unwrap();
     assert_eq!(
@@ -665,6 +691,7 @@ fn can_insert_anchor_right() {
         "",
         &permalinks_ctx,
         InsertAnchor::Right,
+        false,
     );
     let res = render_content("# Hello", &context).unwrap();
     assert_eq!(
@@ -684,6 +711,7 @@ fn can_insert_anchor_for_multi_heading() {
         "",
         &permalinks_ctx,
         InsertAnchor::Right,
+        false,
     );
     let res = render_content("# Hello\n# World", &context).unwrap();
     assert_eq!(
@@ -705,6 +733,7 @@ fn can_insert_anchor_with_exclamation_mark() {
         "",
         &permalinks_ctx,
         InsertAnchor::Left,
+        false,
     );
     let res = render_content("# Hello!", &context).unwrap();
     assert_eq!(
@@ -725,6 +754,7 @@ fn can_insert_anchor_with_link() {
         "",
         &permalinks_ctx,
         InsertAnchor::Left,
+        false,
     );
     let res = render_content("## [Rust](https://rust-lang.org)", &context).unwrap();
     assert_eq!(
@@ -744,6 +774,7 @@ fn can_insert_anchor_with_other_special_chars() {
         "",
         &permalinks_ctx,
         InsertAnchor::Left,
+        false,
     );
     let res = render_content("# Hello*_()", &context).unwrap();
     assert_eq!(
@@ -766,6 +797,7 @@ fn can_insert_anchor_with_lang() {
         "",
         &permalinks_ctx,
         InsertAnchor::Right,
+        false,
     );
     let res = render_content("# Hello", &context).unwrap();
     assert_eq!(res.body, "<h1 id=\"hello\">Hello(en)</h1>\n");
@@ -782,6 +814,7 @@ fn can_make_toc() {
         "https://mysite.com/something",
         &permalinks_ctx,
         InsertAnchor::Left,
+        false,
     );
 
     let res = render_content(
@@ -815,6 +848,7 @@ fn can_ignore_tags_in_toc() {
         "https://mysite.com/something",
         &permalinks_ctx,
         InsertAnchor::Left,
+        false,
     );
 
     let res = render_content(
@@ -852,6 +886,7 @@ fn can_understand_backtick_in_titles() {
         "",
         &permalinks_ctx,
         InsertAnchor::None,
+        false,
     );
     let res = render_content("# `Hello`", &context).unwrap();
     assert_eq!(res.body, "<h1 id=\"hello\"><code>Hello</code></h1>\n");
@@ -868,6 +903,7 @@ fn can_understand_backtick_in_paragraphs() {
         "",
         &permalinks_ctx,
         InsertAnchor::None,
+        false,
     );
     let res = render_content("Hello `world`", &context).unwrap();
     assert_eq!(res.body, "<p>Hello <code>world</code></p>\n");
@@ -885,6 +921,7 @@ fn can_understand_links_in_heading() {
         "",
         &permalinks_ctx,
         InsertAnchor::None,
+        false,
     );
     let res = render_content("# [Rust](https://rust-lang.org)", &context).unwrap();
     assert_eq!(res.body, "<h1 id=\"rust\"><a href=\"https://rust-lang.org\">Rust</a></h1>\n");
@@ -901,6 +938,7 @@ fn can_understand_link_with_title_in_heading() {
         "",
         &permalinks_ctx,
         InsertAnchor::None,
+        false,
     );
     let res =
         render_content("# [Rust](https://rust-lang.org \"Rust homepage\")", &context).unwrap();
@@ -921,6 +959,7 @@ fn can_understand_emphasis_in_heading() {
         "",
         &permalinks_ctx,
         InsertAnchor::None,
+        false,
     );
     let res = render_content("# *Emphasis* text", &context).unwrap();
     assert_eq!(res.body, "<h1 id=\"emphasis-text\"><em>Emphasis</em> text</h1>\n");
@@ -937,6 +976,7 @@ fn can_understand_strong_in_heading() {
         "",
         &permalinks_ctx,
         InsertAnchor::None,
+        false,
     );
     let res = render_content("# **Strong** text", &context).unwrap();
     assert_eq!(res.body, "<h1 id=\"strong-text\"><strong>Strong</strong> text</h1>\n");
@@ -953,6 +993,7 @@ fn can_understand_code_in_heading() {
         "",
         &permalinks_ctx,
         InsertAnchor::None,
+        false,
     );
     let res = render_content("# `Code` text", &context).unwrap();
     assert_eq!(res.body, "<h1 id=\"code-text\"><code>Code</code> text</h1>\n");
@@ -970,6 +1011,7 @@ fn can_understand_footnote_in_heading() {
         "",
         &permalinks_ctx,
         InsertAnchor::None,
+        false,
     );
     let res = render_content("# text [^1] there\n[^1]: footnote", &context).unwrap();
     assert_eq!(
@@ -995,6 +1037,7 @@ fn can_make_valid_relative_link_in_heading() {
         "",
         &permalinks,
         InsertAnchor::None,
+        false,
     );
     let res = render_content(r#" # [rel link](@/pages/about.md)"#, &context).unwrap();
 
@@ -1015,6 +1058,7 @@ fn can_make_permalinks_with_colocated_assets_for_link() {
         "https://vincent.is/about/",
         &permalinks_ctx,
         InsertAnchor::None,
+        false,
     );
     let res = render_content("[an image](image.jpg)", &context).unwrap();
     assert_eq!(res.body, "<p><a href=\"image.jpg\">an image</a></p>\n");
@@ -1031,6 +1075,7 @@ fn can_make_permalinks_with_colocated_assets_for_image() {
         "https://vincent.is/about/",
         &permalinks_ctx,
         InsertAnchor::None,
+        false,
     );
     let res = render_content("![alt text](image.jpg)", &context).unwrap();
     assert_eq!(res.body, "<p><img src=\"image.jpg\" alt=\"alt text\" /></p>\n");
@@ -1047,6 +1092,7 @@ fn markdown_doesnt_wrap_html_in_paragraph() {
         "https://vincent.is/about/",
         &permalinks_ctx,
         InsertAnchor::None,
+        false,
     );
     let res = render_content(
         r#"
@@ -1080,6 +1126,7 @@ fn correctly_captures_external_links() {
         "https://vincent.is/about/",
         &permalinks_ctx,
         InsertAnchor::None,
+        false,
     );
     let content = "
 [a link](http://google.com)
@@ -1106,6 +1153,7 @@ fn can_handle_summaries() {
         "",
         &permalinks_ctx,
         InsertAnchor::None,
+        false,
     );
     let res = render_content(
         r#"
@@ -1160,6 +1208,7 @@ fn doesnt_try_to_highlight_content_from_shortcode() {
         "",
         &permalinks_ctx,
         InsertAnchor::None,
+        false,
     );
     let shortcode_def = utils::templates::get_shortcodes(&tera);
     context.set_shortcode_definitions(&shortcode_def);
@@ -1191,6 +1240,7 @@ fn can_emit_newlines_and_whitespace_with_shortcode() {
         "",
         &permalinks_ctx,
         InsertAnchor::None,
+        false,
     );
     let shortcode_def = utils::templates::get_shortcodes(&tera);
     context.set_shortcode_definitions(&shortcode_def);
@@ -1249,6 +1299,7 @@ fn leaves_custom_url_scheme_untouched() {
         "https://vincent.is/",
         &permalinks_ctx,
         InsertAnchor::None,
+        false,
     );
 
     let res = render_content(content, &context).unwrap();
@@ -1276,6 +1327,7 @@ fn stops_with_an_error_on_an_empty_link() {
         "https://vincent.is/",
         &permalinks_ctx,
         InsertAnchor::None,
+        false,
     );
 
     let res = render_content(content, &context);
@@ -1327,6 +1379,7 @@ Bla bla"#;
         "",
         &permalinks_ctx,
         InsertAnchor::None,
+        false,
     );
     let shortcode_def = utils::templates::get_shortcodes(&tera);
     context.set_shortcode_definitions(&shortcode_def);
@@ -1365,6 +1418,7 @@ fn can_render_shortcode_body_with_no_invalid_escaping() {
         "",
         &permalinks_ctx,
         InsertAnchor::None,
+        false,
     );
     let shortcode_def = utils::templates::get_shortcodes(&tera);
     context.set_shortcode_definitions(&shortcode_def);
@@ -1395,6 +1449,7 @@ fn can_render_commented_out_shortcodes_fine() {
         "",
         &permalinks_ctx,
         InsertAnchor::None,
+        false,
     );
     let shortcode_def = utils::templates::get_shortcodes(&tera);
     context.set_shortcode_definitions(&shortcode_def);
@@ -1436,6 +1491,7 @@ Again more text"#;
         "",
         &permalinks_ctx,
         InsertAnchor::None,
+        false,
     );
     let shortcode_def = utils::templates::get_shortcodes(&tera);
     context.set_shortcode_definitions(&shortcode_def);
@@ -1456,6 +1512,7 @@ fn can_render_emoji_alias() {
         "",
         &permalinks_ctx,
         InsertAnchor::None,
+        false,
     );
     let res = render_content("Hello, World! :smile:", &context).unwrap();
     assert_eq!(res.body, "<p>Hello, World! 😄</p>\n");
@@ -1472,6 +1529,7 @@ fn emoji_aliases_are_ignored_when_disabled_in_config() {
         "",
         &permalinks_ctx,
         InsertAnchor::None,
+        false,
     );
     let res = render_content("Hello, World! :smile:", &context).unwrap();
     assert_eq!(res.body, "<p>Hello, World! :smile:</p>\n");
@@ -1508,6 +1566,7 @@ fn invocation_count_increments_in_shortcode() {
         "",
         &permalinks_ctx,
         InsertAnchor::None,
+        false,
     );
     let shortcode_def = utils::templates::get_shortcodes(&tera);
     context.set_shortcode_definitions(&shortcode_def);
@@ -1527,6 +1586,7 @@ fn basic_external_links_unchanged() {
         "",
         &permalinks_ctx,
         InsertAnchor::None,
+        false,
     );
     let res = render_content("<https://google.com>", &context).unwrap();
     assert_eq!(res.body, "<p><a href=\"https://google.com\">https://google.com</a></p>\n");
@@ -1544,6 +1604,7 @@ fn can_set_target_blank_for_external_link() {
         "",
         &permalinks_ctx,
         InsertAnchor::None,
+        false,
     );
     let res = render_content("<https://google.com>", &context).unwrap();
     assert_eq!(res.body, "<p><a rel=\"noopener\" target=\"_blank\" href=\"https://google.com\">https://google.com</a></p>\n");
@@ -1561,6 +1622,7 @@ fn can_set_nofollow_for_external_link() {
         "",
         &permalinks_ctx,
         InsertAnchor::None,
+        false,
     );
     // Testing href escaping while we're there
     let res = render_content("<https://google.com/éllo>", &context).unwrap();
@@ -1582,6 +1644,7 @@ fn can_set_noreferrer_for_external_link() {
         "",
         &permalinks_ctx,
         InsertAnchor::None,
+        false,
     );
     let res = render_content("<https://google.com>", &context).unwrap();
     assert_eq!(
@@ -1604,6 +1667,7 @@ fn can_set_all_options_for_external_link() {
         "",
         &permalinks_ctx,
         InsertAnchor::None,
+        false,
     );
     let res = render_content("<https://google.com>", &context).unwrap();
     assert_eq!(res.body, "<p><a rel=\"noopener nofollow noreferrer\" target=\"_blank\" href=\"https://google.com\">https://google.com</a></p>\n");
@@ -1621,6 +1685,7 @@ fn can_use_smart_punctuation() {
         "",
         &permalinks_ctx,
         InsertAnchor::None,
+        false,
     );
     let res = render_content(r#"This -- is "it"..."#, &context).unwrap();
     assert_eq!(res.body, "<p>This – is “it”…</p>\n");
@@ -1641,6 +1706,7 @@ fn md_shortcode_regression() {
         "",
         &permalinks_ctx,
         InsertAnchor::None,
+        false,
     );
     let shortcode_def = utils::templates::get_shortcodes(&tera);
     context.set_shortcode_definitions(&shortcode_def);
@@ -1674,6 +1740,7 @@ fn html_shortcode_regression() {
         "",
         &permalinks_ctx,
         InsertAnchor::None,
+        false,
     );
     let shortcode_def = utils::templates::get_shortcodes(&tera);
     context.set_shortcode_definitions(&shortcode_def);

@@ -25,6 +25,7 @@ macro_rules! test_scenario_summary {
             "",
             &permalinks,
             front_matter::InsertAnchor::None,
+            false,
         );
         let shortcode_def = utils::templates::get_shortcodes(&tera);
         context.set_shortcode_definitions(&shortcode_def);

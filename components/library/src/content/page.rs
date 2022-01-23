@@ -235,6 +235,7 @@ impl Page {
             &self.permalink,
             permalinks,
             anchor_insert,
+            self.meta.katex,
         );
         context.set_shortcode_definitions(shortcode_definitions);
         context.set_current_page_path(&self.file.relative);

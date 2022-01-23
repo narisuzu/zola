@@ -15,6 +15,7 @@ fn render_content(content: &str, permalinks: HashMap<String, String>) -> Result<
         "http://mypage.com",
         &permalinks,
         front_matter::InsertAnchor::None,
+        false,
     );
     context.set_current_page_path("mine.md");
 

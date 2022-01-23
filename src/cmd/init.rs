@@ -22,6 +22,11 @@ build_search_index = %SEARCH%
 # Theme can be customised by setting the `highlight_theme` variable to a theme supported by Zola
 highlight_code = %HIGHLIGHT%
 
+[katex]
+// Wether to enable katex globally. 
+// it's necessary to set frontmatter option `katex = true` as well to render formula in Page/Section
+enable = %ENABLE_KATEX%
+
 [extra]
 # Put all your custom variables here
 "#;
@@ -94,6 +99,7 @@ pub fn create_new_project(name: &str, force: bool) -> Result<()> {
     let base_url = ask_url("> What is the URL of your site?", "https://example.com")?;
     let compile_sass = ask_bool("> Do you want to enable Sass compilation?", true)?;
     let highlight = ask_bool("> Do you want to enable syntax highlighting?", false)?;
+    let katex = ask_bool("> Do you want to enable katex?", false)?;
     let search = ask_bool("> Do you want to build a search index of the content?", false)?;
 
     let config = CONFIG
@@ -101,7 +107,8 @@ pub fn create_new_project(name: &str, force: bool) -> Result<()> {
         .replace("%BASE_URL%", &base_url)
         .replace("%COMPILE_SASS%", &format!("{}", compile_sass))
         .replace("%SEARCH%", &format!("{}", search))
-        .replace("%HIGHLIGHT%", &format!("{}", highlight));
+        .replace("%HIGHLIGHT%", &format!("{}", highlight))
+        .replace("%ENABLE_KATEX", &format!("{}", katex));
 
     populate(path, compile_sass, &config)?;
 
