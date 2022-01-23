@@ -47,6 +47,7 @@ macro_rules! test_toc {
             "",
             &permalinks,
             front_matter::InsertAnchor::None,
+            false
         );
         let shortcode_def = utils::templates::get_shortcodes(&tera);
         context.set_shortcode_definitions(&shortcode_def);

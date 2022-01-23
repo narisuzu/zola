@@ -6,6 +6,8 @@ use front_matter::InsertAnchor;
 use tera::{Context, Tera};
 use utils::templates::ShortcodeDefinition;
 
+use crate::katex::KatexContext;
+
 /// All the information from the zola site that is needed to render HTML from markdown
 #[derive(Debug)]
 pub struct RenderContext<'a> {
@@ -18,6 +20,7 @@ pub struct RenderContext<'a> {
     pub insert_anchor: InsertAnchor,
     pub lang: &'a str,
     pub shortcode_definitions: Cow<'a, HashMap<String, ShortcodeDefinition>>,
+    pub katex_context: KatexContext,
 }
 
 impl<'a> RenderContext<'a> {
@@ -28,11 +31,16 @@ impl<'a> RenderContext<'a> {
         current_page_permalink: &'a str,
         permalinks: &'a HashMap<String, String>,
         insert_anchor: InsertAnchor,
+        page_enable_katex: bool,
     ) -> RenderContext<'a> {
         let mut tera_context = Context::new();
         tera_context.insert("config", &config.serialize(lang));
         tera_context.insert("lang", lang);
-
+        let katex_context = KatexContext::new(
+            page_enable_katex && config.katex.enable,
+            config.katex.restrict,
+            config.katex.delimiters.clone(),
+        );
         Self {
             tera: Cow::Borrowed(tera),
             tera_context,
@@ -43,6 +51,7 @@ impl<'a> RenderContext<'a> {
             config,
             lang,
             shortcode_definitions: Cow::Owned(HashMap::new()),
+            katex_context,
         }
     }
 
@@ -71,6 +80,7 @@ impl<'a> RenderContext<'a> {
             config,
             lang: &config.default_language,
             shortcode_definitions: Cow::Owned(HashMap::new()),
+            katex_context: KatexContext::new(false, false, vec![]),
         }
     }
 }

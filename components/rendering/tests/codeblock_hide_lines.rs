@@ -39,6 +39,7 @@ fn hide_lines_simple() {
         "",
         &permalinks_ctx,
         InsertAnchor::None,
+        false,
     );
     let res = render_content(
         r#"

@@ -19,6 +19,7 @@ fn can_add_line_numbers() {
         "",
         &permalinks_ctx,
         InsertAnchor::None,
+        false,
     );
     let res = render_content(
         r#"
@@ -49,6 +50,7 @@ fn can_add_line_numbers_with_linenostart() {
         "",
         &permalinks_ctx,
         InsertAnchor::None,
+        false,
     );
     let res = render_content(
         r#"
@@ -79,6 +81,7 @@ fn can_add_line_numbers_with_highlight() {
         "",
         &permalinks_ctx,
         InsertAnchor::None,
+        false,
     );
     let res = render_content(
         r#"

@@ -16,7 +16,6 @@ pest_derive = "2"
 regex = "1"
 lazy_static = "1"
 gh-emoji = "1.0"
-katex = "*"
 
 errors = { path = "../errors" }
 front_matter = { path = "../front_matter" }
@@ -27,3 +26,9 @@ link_checker = { path = "../link_checker" }
 [dev-dependencies]
 templates = { path = "../templates" }
 
+
+[target.'cfg(any(unix, all(windows, target_env = "gnu")))'.dependencies]
+katex = "0.4"
+
+[target.'cfg(not(any(unix, all(windows, target_env = "gnu"))))'.dependencies]
+katex = { version = "0.4", default-features = false, features = ["duktape"] }

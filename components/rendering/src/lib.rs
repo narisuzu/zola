@@ -29,10 +29,10 @@ pub fn render_content(content: &str, context: &RenderContext) -> Result<markdown
     let (content, html_shortcodes) =
         insert_md_shortcodes(content, shortcodes, &context.tera_context, &context.tera)?;
 
-    // Step 2: render KaTeX code
-    let content = render_katex(&content, &context.config.katex)?;
+    // Step 2: render KaTeX formula
+    let content = render_katex(&content, &context.katex_context)?;
 
-    // Step 2: we render the markdown and the HTML markdown at the same time
+    // Step 3: we render the markdown and the HTML markdown at the same time
     let html_context = markdown_to_html(&content, context, html_shortcodes)?;
 
     // TODO: Here issue #1418 could be implemented
