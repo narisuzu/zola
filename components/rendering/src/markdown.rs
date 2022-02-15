@@ -307,7 +307,7 @@ pub fn markdown_to_html(
                 Event::Start(Tag::CodeBlock(ref kind)) => {
                     let fence = match kind {
                         cmark::CodeBlockKind::Fenced(fence_info) => {
-                            if fence_info.to_string() == "katex" {
+                            if context.config.katex.codeblock && fence_info.to_string() == "katex" {
                                 equation = true;
                             }
                             FenceSettings::new(fence_info)
