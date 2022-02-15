@@ -186,6 +186,8 @@ fn complete_page() {
         .unwrap();
     }
 
+    let page_katex_macros = std::collections::HashMap::new();
+
     let mut context = rendering::RenderContext::new(
         &tera,
         &config,
@@ -193,6 +195,7 @@ fn complete_page() {
         "",
         &permalinks,
         front_matter::InsertAnchor::None,
+        &page_katex_macros,
     );
     let shortcode_def = utils::templates::get_shortcodes(&tera);
     context.set_shortcode_definitions(&shortcode_def);

@@ -30,6 +30,7 @@ macro_rules! colored_html {
 fn hide_lines_simple() {
     let tera_ctx = Tera::default();
     let permalinks_ctx = HashMap::new();
+    let page_katex_ctx = HashMap::new();
     let mut config = Config::default_for_test();
     config.markdown.highlight_code = true;
     let context = RenderContext::new(
@@ -39,6 +40,7 @@ fn hide_lines_simple() {
         "",
         &permalinks_ctx,
         InsertAnchor::None,
+        &page_katex_ctx,
     );
     let res = render_content(
         r#"

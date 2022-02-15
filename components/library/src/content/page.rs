@@ -5,7 +5,7 @@ use std::path::{Path, PathBuf};
 use lazy_static::lazy_static;
 use regex::Regex;
 use slotmap::DefaultKey;
-use tera::{Context as TeraContext, Tera};
+use tera::{to_value, Context as TeraContext, Tera};
 
 use crate::library::Library;
 use config::Config;
@@ -235,6 +235,7 @@ impl Page {
             &self.permalink,
             permalinks,
             anchor_insert,
+            &self.meta.katex_macros,
         );
         context.set_shortcode_definitions(shortcode_definitions);
         context.set_current_page_path(&self.file.relative);

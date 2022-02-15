@@ -32,6 +32,7 @@ macro_rules! test_scenario {
             ).unwrap()
         );
 
+        let page_katex_macros = std::collections::HashMap::new();
         let mut context = rendering::RenderContext::new(
             &tera,
             &config,
@@ -39,6 +40,7 @@ macro_rules! test_scenario {
             "",
             &permalinks,
             front_matter::InsertAnchor::None,
+            &page_katex_macros
         );
         let shortcode_def = utils::templates::get_shortcodes(&tera);
         context.set_shortcode_definitions(&shortcode_def);

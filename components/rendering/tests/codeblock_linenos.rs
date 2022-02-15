@@ -10,6 +10,7 @@ use rendering::{render_content, RenderContext};
 fn can_add_line_numbers() {
     let tera_ctx = Tera::default();
     let permalinks_ctx = HashMap::new();
+    let page_katex_macros = HashMap::new();
     let mut config = Config::default_for_test();
     config.markdown.highlight_code = true;
     let context = RenderContext::new(
@@ -19,6 +20,7 @@ fn can_add_line_numbers() {
         "",
         &permalinks_ctx,
         InsertAnchor::None,
+        &page_katex_macros,
     );
     let res = render_content(
         r#"
@@ -40,6 +42,7 @@ bar
 fn can_add_line_numbers_with_linenostart() {
     let tera_ctx = Tera::default();
     let permalinks_ctx = HashMap::new();
+    let page_katex_macros = HashMap::new();
     let mut config = Config::default_for_test();
     config.markdown.highlight_code = true;
     let context = RenderContext::new(
@@ -49,6 +52,7 @@ fn can_add_line_numbers_with_linenostart() {
         "",
         &permalinks_ctx,
         InsertAnchor::None,
+        &page_katex_macros,
     );
     let res = render_content(
         r#"
@@ -70,6 +74,7 @@ bar
 fn can_add_line_numbers_with_highlight() {
     let tera_ctx = Tera::default();
     let permalinks_ctx = HashMap::new();
+    let page_katex_macros = HashMap::new();
     let mut config = Config::default_for_test();
     config.markdown.highlight_code = true;
     let context = RenderContext::new(
@@ -79,6 +84,7 @@ fn can_add_line_numbers_with_highlight() {
         "",
         &permalinks_ctx,
         InsertAnchor::None,
+        &page_katex_macros,
     );
     let res = render_content(
         r#"

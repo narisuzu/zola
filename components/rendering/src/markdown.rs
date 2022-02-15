@@ -1,8 +1,12 @@
+use std::collections::HashMap;
+
 use lazy_static::lazy_static;
 use pulldown_cmark as cmark;
+use tera::from_value;
 
 use crate::context::RenderContext;
 use crate::table_of_contents::{make_table_of_contents, Heading};
+use crate::{render_katex, KatexContext};
 use errors::{Error, Result};
 use front_matter::InsertAnchor;
 use utils::site::resolve_internal_link;
@@ -161,6 +165,7 @@ pub fn markdown_to_html(
     let mut error = None;
 
     let mut code_block: Option<CodeBlock> = None;
+    let mut equation = false;
 
     let mut inserted_anchors: Vec<String> = vec![];
     let mut headings: Vec<Heading> = vec![];
@@ -184,6 +189,12 @@ pub fn markdown_to_html(
     let mut html_shortcodes: Vec<_> = html_shortcodes.into_iter().rev().collect();
     let mut next_shortcode = html_shortcodes.pop();
     let contains_shortcode = |txt: &str| -> bool { txt.contains(SHORTCODE_PLACEHOLDER) };
+
+    let mut katex_macros = context.config.katex.macros.clone();
+    if let Some(val) = context.tera_context.get("katex_macros") {
+        let page_macros: HashMap<String, String> = from_value(val.clone()).unwrap();
+        katex_macros.extend(page_macros);
+    }
 
     {
         let mut events = Vec::new();
@@ -269,6 +280,15 @@ pub fn markdown_to_html(
                             html = code_block.highlight(&text);
                         }
                         events.push(Event::Html(html.into()));
+                    } else if equation {
+                        let ctx = KatexContext::new(
+                            context.config.katex.restrict,
+                            true,
+                            katex_macros.clone(),
+                        );
+                        let result = render_katex(&text, &ctx)?;
+                        events.push(Event::Html(result.into()));
+                        equation = false;
                     } else {
                         let text = if context.config.markdown.render_emoji {
                             EMOJI_REPLACER.replace_all(&text).to_string().into()
@@ -286,12 +306,19 @@ pub fn markdown_to_html(
                 }
                 Event::Start(Tag::CodeBlock(ref kind)) => {
                     let fence = match kind {
-                        cmark::CodeBlockKind::Fenced(fence_info) => FenceSettings::new(fence_info),
+                        cmark::CodeBlockKind::Fenced(fence_info) => {
+                            if fence_info.to_string() == "katex" {
+                                equation = true;
+                            }
+                            FenceSettings::new(fence_info)
+                        }
                         _ => FenceSettings::new(""),
                     };
-                    let (block, begin) = CodeBlock::new(fence, context.config, path);
-                    code_block = Some(block);
-                    events.push(Event::Html(begin.into()));
+                    if !equation {
+                        let (block, begin) = CodeBlock::new(fence, context.config, path);
+                        code_block = Some(block);
+                        events.push(Event::Html(begin.into()));
+                    }
                 }
                 Event::End(Tag::CodeBlock(_)) => {
                     // reset highlight and close the code block

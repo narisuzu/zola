@@ -5,6 +5,10 @@ use tera::Result as TeraResult;
 /// Adds global fns that are to be available to shortcodes while rendering markdown
 pub fn register_early_global_fns(site: &mut Site) -> TeraResult<()> {
     site.tera.register_filter(
+        "tex",
+        filters::TexFilter::new(site.config.katex.restrict, site.config.katex.macros.clone()),
+    );
+    site.tera.register_filter(
         "markdown",
         filters::MarkdownFilter::new(
             site.base_path.clone(),

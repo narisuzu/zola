@@ -1,11 +1,11 @@
-use std::borrow::Cow;
+use std::borrow::{BorrowMut, Cow};
 use std::collections::HashMap;
 use std::hash::BuildHasher;
 use std::path::PathBuf;
 
 use base64::{decode, encode};
-use config::Config;
-use rendering::{render_content, RenderContext};
+use config::{Config, Katex as KatexConfig};
+use rendering::{render_content, render_katex, KatexContext, RenderContext};
 use tera::{
     to_value, try_get_value, Error as TeraError, Filter as TeraFilter, Result as TeraResult, Tera,
     Value,
@@ -108,6 +108,41 @@ impl TeraFilter for NumFormatFilter {
             ))
         })?;
         Ok(to_value(num.to_formatted_string(&locale)).unwrap())
+    }
+}
+
+#[derive(Debug)]
+pub struct TexFilter {
+    restrict: bool,
+    global_macros: HashMap<String, String>,
+}
+
+impl TexFilter {
+    pub fn new(restrict: bool, global_macros: HashMap<String, String>) -> Self {
+        TexFilter { restrict, global_macros }
+    }
+}
+
+impl TeraFilter for TexFilter {
+    fn filter(&self, value: &Value, args: &HashMap<String, Value>) -> TeraResult<Value> {
+        let equation = try_get_value!("tex", "value", String, value);
+        let display = match args.get("display") {
+            Some(display) => try_get_value!("tex", "display", bool, display),
+            None => false,
+        };
+
+        // if we can get Context of Tera, below should be modified.
+        let mut macros = self.global_macros.clone();
+        if let Some(page_macros) = args.get("macros") {
+            let page_macros = try_get_value!("tex", "macros", HashMap<String, String>, page_macros);
+            macros.extend(page_macros);
+        }
+
+        let ctx = KatexContext::new(self.restrict, display, macros);
+        match render_katex(&equation, &ctx) {
+            Ok(s) => Ok(to_value(s).unwrap()),
+            Err(e) => Err(TeraError::msg(e)),
+        }
     }
 }
 

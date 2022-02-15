@@ -1,5 +1,6 @@
 mod codeblock;
 mod context;
+mod katex;
 mod markdown;
 mod shortcode;
 mod table_of_contents;
@@ -8,6 +9,7 @@ use shortcode::{extract_shortcodes, insert_md_shortcodes};
 
 use errors::Result;
 
+pub use crate::katex::{render_katex, KatexContext};
 pub use context::RenderContext;
 use markdown::markdown_to_html;
 pub use markdown::Rendered;

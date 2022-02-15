@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use serde_derive::{Deserialize, Serialize};
 use tera::{Map, Value};
 
@@ -70,6 +72,8 @@ pub struct SectionFrontMatter {
     /// Whether to generate a feed for the current section
     #[serde(skip_serializing)]
     pub generate_feed: bool,
+    /// the definition of katex macros inside a section
+    pub katex_macros: HashMap<String, String>,
     /// Any extra parameter present in the front matter
     pub extra: Map<String, Value>,
 }
@@ -116,6 +120,7 @@ impl Default for SectionFrontMatter {
             generate_feed: false,
             extra: Map::new(),
             draft: false,
+            katex_macros: HashMap::new(),
         }
     }
 }

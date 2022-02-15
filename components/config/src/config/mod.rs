@@ -4,6 +4,7 @@ pub mod markup;
 pub mod search;
 pub mod slugify;
 pub mod taxonomies;
+pub mod katex;
 
 use std::collections::HashMap;
 use std::path::{Path, PathBuf};
@@ -85,6 +86,8 @@ pub struct Config {
     pub search: search::Search,
     /// The config for the Markdown rendering: syntax highlighting and everything
     pub markdown: markup::Markdown,
+    /// The config for the KaTeX rendering
+    pub katex: katex::Katex,
     /// All user params set in `[extra]` in the config
     pub extra: HashMap<String, Toml>,
 }
@@ -357,6 +360,7 @@ impl Default for Config {
             search: search::Search::default(),
             markdown: markup::Markdown::default(),
             extra: HashMap::new(),
+            katex: katex::Katex::default(),
         }
     }
 }

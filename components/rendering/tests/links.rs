@@ -8,6 +8,7 @@ mod common;
 fn render_content(content: &str, permalinks: HashMap<String, String>) -> Result<Rendered> {
     let config = config::Config::default_for_test();
     let tera = tera::Tera::default();
+    let page_katex_macros = HashMap::new();
     let mut context = rendering::RenderContext::new(
         &tera,
         &config,
@@ -15,6 +16,7 @@ fn render_content(content: &str, permalinks: HashMap<String, String>) -> Result<
         "http://mypage.com",
         &permalinks,
         front_matter::InsertAnchor::None,
+        &page_katex_macros,
     );
     context.set_current_page_path("mine.md");
 

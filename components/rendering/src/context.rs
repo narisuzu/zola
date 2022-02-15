@@ -28,10 +28,12 @@ impl<'a> RenderContext<'a> {
         current_page_permalink: &'a str,
         permalinks: &'a HashMap<String, String>,
         insert_anchor: InsertAnchor,
+        page_katex_macros: &'a HashMap<String, String>,
     ) -> RenderContext<'a> {
         let mut tera_context = Context::new();
         tera_context.insert("config", &config.serialize(lang));
         tera_context.insert("lang", lang);
+        tera_context.insert("katex_macros", page_katex_macros);
 
         Self {
             tera: Cow::Borrowed(tera),

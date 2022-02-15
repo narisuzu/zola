@@ -4,7 +4,7 @@ mod theme;
 
 pub use crate::config::{
     languages::LanguageOptions, link_checker::LinkChecker, search::Search, slugify::Slugify,
-    taxonomies::Taxonomy, Config,
+    taxonomies::Taxonomy, Config, katex::Katex
 };
 use errors::Result;
 

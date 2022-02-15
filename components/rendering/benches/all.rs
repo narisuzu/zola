@@ -85,6 +85,7 @@ fn bench_render_content_with_highlighting(b: &mut test::Bencher) {
     let mut tera = Tera::default();
     tera.add_raw_template("shortcodes/youtube.html", "{{id}}").unwrap();
     let permalinks_ctx = HashMap::new();
+    let page_katex_macros = HashMap::new();
     let mut config = Config::default();
     config.markdown.highlight_code = true;
     let current_page_permalink = "";
@@ -95,6 +96,7 @@ fn bench_render_content_with_highlighting(b: &mut test::Bencher) {
         current_page_permalink,
         &permalinks_ctx,
         InsertAnchor::None,
+        &page_katex_macros,
     );
     b.iter(|| render_content(CONTENT, &context).unwrap());
 }
@@ -104,6 +106,7 @@ fn bench_render_content_without_highlighting(b: &mut test::Bencher) {
     let mut tera = Tera::default();
     tera.add_raw_template("shortcodes/youtube.html", "{{id}}").unwrap();
     let permalinks_ctx = HashMap::new();
+    let page_katex_macros = HashMap::new();
     let mut config = Config::default();
     config.markdown.highlight_code = false;
     let current_page_permalink = "";
@@ -114,6 +117,7 @@ fn bench_render_content_without_highlighting(b: &mut test::Bencher) {
         current_page_permalink,
         &permalinks_ctx,
         InsertAnchor::None,
+        &page_katex_macros,
     );
     b.iter(|| render_content(CONTENT, &context).unwrap());
 }
@@ -124,6 +128,7 @@ fn bench_render_content_no_shortcode(b: &mut test::Bencher) {
     let mut config = Config::default();
     config.markdown.highlight_code = false;
     let permalinks_ctx = HashMap::new();
+    let page_katex_macros = HashMap::new();
     let current_page_permalink = "";
     let context = RenderContext::new(
         &tera,
@@ -132,6 +137,7 @@ fn bench_render_content_no_shortcode(b: &mut test::Bencher) {
         current_page_permalink,
         &permalinks_ctx,
         InsertAnchor::None,
+        &page_katex_macros,
     );
 
     b.iter(|| render_content(&content2, &context).unwrap());
@@ -145,6 +151,7 @@ fn bench_render_content_with_emoji(b: &mut test::Bencher) {
     config.markdown.highlight_code = false;
     config.markdown.render_emoji = true;
     let permalinks_ctx = HashMap::new();
+    let page_katex_macros = HashMap::new();
     let current_page_permalink = "";
     let context = RenderContext::new(
         &tera,
@@ -153,6 +160,7 @@ fn bench_render_content_with_emoji(b: &mut test::Bencher) {
         current_page_permalink,
         &permalinks_ctx,
         InsertAnchor::None,
+        &page_katex_macros,
     );
 
     b.iter(|| render_content(&content2, &context).unwrap());
