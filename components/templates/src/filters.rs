@@ -1,10 +1,10 @@
-use std::borrow::{BorrowMut, Cow};
+use std::borrow::Cow;
 use std::collections::HashMap;
 use std::hash::BuildHasher;
 use std::path::PathBuf;
 
 use base64::{decode, encode};
-use config::{Config, Katex as KatexConfig};
+use config::Config;
 use rendering::{render_content, render_katex, KatexContext, RenderContext};
 use tera::{
     to_value, try_get_value, Error as TeraError, Filter as TeraFilter, Result as TeraResult, Tera,
