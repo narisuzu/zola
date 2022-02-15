@@ -58,6 +58,8 @@ pub struct PageFrontMatter {
     /// Defaults to `true` but is only used if search if explicitly enabled in the config.
     #[serde(skip_serializing)]
     pub in_search_index: bool,
+    /// the definition of katex macros inside a page
+    pub katex_macros: HashMap<String, String>,
     /// Any extra parameter present in the front matter
     pub extra: Map<String, Value>,
 }
@@ -144,6 +146,7 @@ impl Default for PageFrontMatter {
             in_search_index: true,
             template: None,
             extra: Map::new(),
+            katex_macros: HashMap::new(),
         }
     }
 }
